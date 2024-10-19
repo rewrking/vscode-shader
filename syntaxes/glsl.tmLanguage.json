@@ -56,8 +56,54 @@
 			"name": "comment.line.double-slash.glsl"
 		},
 		{
-			"match": "^\\s*#\\s*(define|defined|undef|if|ifdef|ifndef|else|elif|endif|error|pragma|extension|version|line)\\b",
-			"name": "keyword.directive.preprocessor.glsl"
+			"begin": "^\\s*(#(define|defined|undef|if|ifdef|ifndef|else|elif|endif|error|extension|version|line))\\s*([A-Z_]+)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.directive.preprocessor.glsl"
+				},
+				"3": {
+					"name": "entity.name.function.glsl"
+				}
+			},
+			"end": "\\b",
+			"name": "meta.preprocessor.macro.glsl"
+		},
+		{
+			"begin": "^\\s*(#(pragma))\\s*([a-z_]+)\\s*(:)\\s*(vertex|fragment|geometry|compute)?",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.directive.preprocessor.glsl"
+				},
+				"3": {
+					"name": "entity.other.attribute-name.pragma.preprocessor.glsl"
+				},
+				"4": {
+					"name": "punctuation.definition.colon.glsl"
+				},
+				"5": {
+					"name": "entity.other.attribute-name.pragma.preprocessor.glsl"
+				}
+			},
+			"end": "\\b",
+			"name": "meta.preprocessor.pragma.glsl"
+		},
+		{
+			"match": "^(@import)\\s*((.)?(\\b[\\w]+\\b))+(;)$",
+			"captures": {
+				"1": {
+					"name": "keyword.control.import.glsl"
+				},
+				"3": {
+					"name": "punctuation.separator.dot-access.glsl"
+				},
+				"4": {
+					"name": "variable.other.import-name.glsl"
+				},
+				"5": {
+					"name": "punctuation.definition.semi-colon.glsl"
+				}
+			},
+			"name": "meta.preprocessor.import.glsl"
 		},
 		{
 			"match": "\\b(__LINE__|__FILE__|__VERSION__|GL_core_profile|GL_es_profile|GL_compatibility_profile)\\b",
@@ -89,7 +135,27 @@
 		},
 		{
 			"match": "\\b(abs|acos|all|any|asin|atan|ceil|clamp|cos|cross|degrees|dFdx|dFdy|distance|dot|equal|exp|exp2|faceforward|floor|fract|ftransform|fwidth|greaterThan|greaterThanEqual|inversesqrt|length|lessThan|lessThanEqual|log|log2|matrixCompMult|max|min|mix|mod|noise[1-4]|normalize|not|notEqual|outerProduct|pow|radians|reflect|refract|shadow1D|shadow1DLod|shadow1DProj|shadow1DProjLod|shadow2D|shadow2DLod|shadow2DProj|shadow2DProjLod|sign|sin|smoothstep|sqrt|step|tan|texture1D|texture1DLod|texture1DProj|texture1DProjLod|texture2D|texture2DLod|texture2DProj|texture2DProjLod|texture3D|texture3DLod|texture3DProj|texture3DProjLod|textureCube|textureCubeLod|transpose)\\b",
+			"name": "support.function.standard.glsl"
+		},
+		{
+			"match": "\\b([\\w]+)(?=\\()\\b",
 			"name": "support.function.glsl"
+		},
+		{
+			"match": "(\\b\\w+\\b)((.)(\\b\\w+\\b))+",
+			"captures": {
+				"3": {
+					"name": "punctuation.separator.dot-access.glsl"
+				},
+				"4": {
+					"name": "variable.other.member.glsl"
+				}
+			},
+			"name": "meta.variable.glsl"
+		},
+		{
+			"match": "[(){},.;]",
+			"name": "punctuation.definition.any.glsl"
 		}
 	],
 	"repository": {
