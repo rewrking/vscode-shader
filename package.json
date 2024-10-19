@@ -2,8 +2,9 @@
 	"name": "shader",
 	"displayName": "Shader languages support for VS Code",
 	"description": "Syntax highlighter for shader language (hlsl, glsl, cg) ",
-	"version": "1.1.5",
-	"publisher": "slevesque",
+	"version": "1.2.0",
+	"publisher": "rewrking",
+	"private": true,
 	"categories": [
 		"Programming Languages"
 	],
@@ -16,19 +17,19 @@
 	"license": "LICENSE.md",
 	"icon": "icon.png",
 	"bugs": {
-		"url": "https://github.com/stef-levesque/vscode-shader/issues"
+		"url": "https://github.com/rewrking/vscode-shader/issues"
 	},
-	"homepage": "https://github.com/stef-levesque/vscode-shader/blob/master/README.md",
+	"homepage": "https://github.com/rewrking/vscode-shader/blob/master/README.md",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/stef-levesque/vscode-shader.git"
+		"url": "https://github.com/rewrking/vscode-shader.git"
 	},
 	"galleryBanner": {
 		"color": "#5c2d91",
 		"theme": "dark"
 	},
 	"engines": {
-		"vscode": "^1.53.0"
+		"vscode": "^1.64.0"
 	},
 	"keywords": [
 		"shader",
@@ -91,7 +92,7 @@
 			{
 				"language": "glsl",
 				"scopeName": "source.glsl",
-				"path": "./syntaxes/glsl.tmLanguage"
+				"path": "./syntaxes/glsl.tmLanguage.json"
 			},
 			{
 				"language": "cg",

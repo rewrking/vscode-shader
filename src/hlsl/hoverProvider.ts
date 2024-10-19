@@ -1,13 +1,13 @@
 'use strict';
 
-import { HoverProvider, Hover, SymbolInformation, SymbolKind, MarkdownString, MarkedString, TextDocument, CancellationToken, Range, Position, Uri, ViewColumn, Disposable, commands, window, workspace, WebviewPanel } from 'vscode';
+import { HoverProvider, Hover, SymbolInformation, SymbolKind, MarkdownString, TextDocument, CancellationToken, Range, Position, Uri, ViewColumn, Disposable, commands, window, workspace, WebviewPanel } from 'vscode';
 import { HTML_TEMPLATE } from './html';
 import hlslGlobals = require('./hlslGlobals');
 import { https } from 'follow-redirects';
 import { JSDOM } from 'jsdom';
 
-export function textToMarkedString(text: string): MarkedString {
-	return text.replace(/[\\`*_{}[\]()#+\-.!]/g, '\\$&'); // escape markdown syntax tokens: http://daringfireball.net/projects/markdown/syntax#backslash
+export function textToMarkedString(text: string): MarkdownString {
+	return new MarkdownString(text.replace(/[\\`*_{}[\]()#+\-.!]/g, '\\$&')); // escape markdown syntax tokens: http://daringfireball.net/projects/markdown/syntax#backslash
 }
 
 export function linkToMarkdownString(linkUrl: string): MarkdownString {
@@ -75,7 +75,7 @@ export default class HLSLHoverProvider implements HoverProvider {
 
 
     public async provideHover(document: TextDocument, position: Position, token: CancellationToken): Promise<Hover> {
-        
+
         let enable = workspace.getConfiguration('hlsl').get<boolean>('suggest.basic', true);
         if (!enable) {
             return null;
@@ -94,12 +94,12 @@ export default class HLSLHoverProvider implements HoverProvider {
         }
 
         if (backchar === '#') {
-            const key = name.substr(1);
+            const key = name.substring(1);
             var entry = hlslGlobals.preprocessors[name.toUpperCase()];
             if (entry && entry.description) {
                 let signature = '(*preprocessor*) ';
                 signature += '**#' + name + '**';
-                let contents: MarkedString[] = [];
+                let contents: MarkdownString[] = [];
                 contents.push(new MarkdownString(signature));
                 contents.push(textToMarkedString(entry.description));
                 contents.push(linkToMarkdownString(entry.link));
@@ -118,7 +118,7 @@ export default class HLSLHoverProvider implements HoverProvider {
                 signature += params.slice(0, -1);
             }
             signature += ')';
-            let contents: MarkedString[] = [];
+            let contents: MarkdownString[] = [];
             contents.push(new MarkdownString(signature));
             contents.push(textToMarkedString(entry.description));
             contents.push(linkToMarkdownString(entry.link));
@@ -129,7 +129,7 @@ export default class HLSLHoverProvider implements HoverProvider {
         if (entry && entry.description) {
             let signature = '(*datatype*) ';
             signature += '**' + name + '**';
-            let contents: MarkedString[] = [];
+            let contents: MarkdownString[] = [];
             contents.push(new MarkdownString(signature));
             contents.push(textToMarkedString(entry.description));
             contents.push(linkToMarkdownString(entry.link));
@@ -140,7 +140,7 @@ export default class HLSLHoverProvider implements HoverProvider {
         if (entry && entry.description) {
             let signature = '(*semantic*) ';
             signature += '**' + name + '**';
-            let contents: MarkedString[] = [];
+            let contents: MarkdownString[] = [];
             contents.push(new MarkdownString(signature));
             contents.push(textToMarkedString(entry.description));
             contents.push(linkToMarkdownString(entry.link));
@@ -152,7 +152,7 @@ export default class HLSLHoverProvider implements HoverProvider {
         if (entry && entry.description) {
             let signature = '(*semantic*) ';
             signature += '**' + name + '**';
-            let contents: MarkedString[] = [];
+            let contents: MarkdownString[] = [];
             contents.push(new MarkdownString(signature));
             contents.push(textToMarkedString(entry.description));
             contents.push(linkToMarkdownString(entry.link));
@@ -163,7 +163,7 @@ export default class HLSLHoverProvider implements HoverProvider {
         if (entry) {
             let signature = '(*keyword*) ';
             signature += '**' + name + '**';
-            let contents: MarkedString[] = [];
+            let contents: MarkdownString[] = [];
             contents.push(new MarkdownString(signature));
             contents.push(textToMarkedString(entry.description));
             contents.push(linkToMarkdownString(entry.link));
@@ -174,7 +174,7 @@ export default class HLSLHoverProvider implements HoverProvider {
 
         for (let s of symbols) {
             if (s.name === name) {
-                let contents: MarkedString[] = [];
+                let contents: MarkdownString[] = [];
                 let signature = '(*' + SymbolKind[s.kind].toLowerCase() + '*) ';
                 signature += s.containerName ? s.containerName + '.' : '';
                 signature += '**' + name + '**';
@@ -183,13 +183,15 @@ export default class HLSLHoverProvider implements HoverProvider {
 
                 if (s.location.uri.toString() === document.uri.toString()) {
                     //contents = [];
-                    contents.push( {language: 'hlsl', value: document.getText(s.location.range)} );
+                    const newValue = new MarkdownString();
+                    newValue.appendCodeblock(document.getText(s.location.range), "hlsl");
+                    contents.push(newValue);
                 }
-                
+
                 return new Hover(contents, wordRange);
             }
         }
-    } 
+    }
 }
 
 function getWebviewContent(link: string): Promise<string> {
