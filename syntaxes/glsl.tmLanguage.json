@@ -88,7 +88,7 @@
 			"name": "meta.preprocessor.pragma.glsl"
 		},
 		{
-			"match": "^(@import)\\s*((\\.)?(\\b[\\w]+\\b))*([\\n;])",
+			"match": "(@import\\b)\\s*((\\.)?(\\b[\\w]+\\b))*([\\n;])",
 			"captures": {
 				"1": {
 					"name": "keyword.control.import.glsl"

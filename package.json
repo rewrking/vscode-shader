@@ -110,16 +110,6 @@
 				}
 			},
 			{
-				"scopeName": "source.cpp.glsl",
-				"path": "./syntaxes/glsl-cpp.tmLanguage.json",
-				"injectTo": [
-					"source.cpp"
-				],
-				"embeddedLanguages": {
-					"source.glsl": "glsl"
-				}
-			},
-			{
 				"scopeName": "source.cpp.hlsl",
 				"path": "./syntaxes/hlsl-cpp.tmLanguage.json",
 				"injectTo": [
