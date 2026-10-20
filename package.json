@@ -162,5 +162,8 @@
 		"follow-redirects": "^1.5.8",
 		"jsdom": "^11.3.0",
 		"tmp": "0.0.33"
+	},
+	"__metadata": {
+		"size": 181046128
 	}
 }
